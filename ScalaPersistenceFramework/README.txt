@@ -1,17 +1,16 @@
 The Scala Persistence Framework is a lightweight O/R mapper written in Scala. Following are 
 directions for how to build it.  The easiest way to get the necessary setup is to 
-download the Typesafe Scala stack(www.typesafe.com).
+download the Typesafe Scala stack(www.typesafe.com). The project's only dependencies are
+a JDK >= 1.6 and the Scala 2.10 runtime environment. See below for a few dependencies required
+to run the Scalatest unit tests.
 
 Dependencies:
 1) Java 1.6 or greater
 2) Scala 2.10
 
 The project contains the following directory structure:
-lib/ - Contains the libraries required to run the project as an application.
-Note that this directory is empty as nothing is required except
-the JVM and Scala runtime.
 
-testlib/ - Contains the additional libraries needed to run the automated tests. 
+testlib/ - Contains the libraries needed to run the automated tests. 
 These libraries are not needed at runtime in your application that uses the
 Scala Persistence Framework.  The Springframework is used only 
 to provide a mock JNDI container. The commons* libraries provide connection 
