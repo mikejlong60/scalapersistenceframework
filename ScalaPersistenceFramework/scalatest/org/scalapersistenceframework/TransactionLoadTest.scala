@@ -1,18 +1,20 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2013 Michael J Long
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ***************************************************************************** */
+ * ****************************************************************************
+ */
 package org.scalapersistenceframework
 
 import java.util.logging.Logger
@@ -30,7 +32,6 @@ import org.scalapersistenceframework.service.DaoService
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.FunSuite
 
-import examples.crud.DataSourceConfigurer
 import examples.crud.Order
 import examples.crud.OrderDao
 
@@ -38,11 +39,15 @@ object TransactionLoadTest {
   var result: Option[Order] = None
 }
 
-class TransactionLoadTest extends FunSuite with BeforeAndAfterEach with DataSourceConfigurer {
-  val logger = Logger.getLogger(this.getClass().getName())
+class TransactionLoadTest extends FunSuite with DataSourceConfigurer with BeforeAndAfterEach {
+  override val logger = Logger.getLogger(this.getClass().getName())
 
   override def beforeEach {
     super.configureJndi
+  }
+
+  override def afterEach {
+    super.cleanupTransactions
   }
 
   import org.scalapersistenceframework.DefaultTransactionPrefs.transIsolationLevel
@@ -58,7 +63,7 @@ class TransactionLoadTest extends FunSuite with BeforeAndAfterEach with DataSour
 
     val actors = new scala.collection.mutable.ArrayBuffer[ConcurrentTransactionActor]
 
-    val numThreads = 100
+    val numThreads = 10
     for (i <- 0 to (numThreads - 1)) {
       actors += new ConcurrentTransactionActor
     }
@@ -72,14 +77,16 @@ class TransactionLoadTest extends FunSuite with BeforeAndAfterEach with DataSour
       }
     }
 
-    for (i <- 0 to (actors.length - 1)) {
-      for (i <- 0 to (numThreads * 500)) {
-        logger.info("receiving message from CurrentTransactionActor thread");
-        receiveWithin(50000) {
-          case TIMEOUT =>
-            logger.info("Exiting initiating actor with timeout")
-            exit
-          case msg => logger.info(msg.toString)
+    intercept[InterruptedException] {
+      for (i <- 0 to (actors.length - 1)) {
+        for (i <- 0 to (numThreads * 5)) {
+          logger.info("receiving message from CurrentTransactionActor thread");
+          receiveWithin(50000) {
+            case TIMEOUT =>
+              logger.info("Exiting initiating actor with timeout")
+              exit
+            case msg => logger.info(msg.toString)
+          }
         }
       }
     }

@@ -1,18 +1,20 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2013 Michael J Long
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ***************************************************************************** */
+ * ****************************************************************************
+ */
 package org.scalapersistenceframework
 
 import java.sql.Connection
@@ -341,13 +343,14 @@ object Transaction {
    */
   def configure(connectionName: String) {
     Transaction.this.synchronized {
-      if (connectionName == null || connectionName.length == 0) {
+      if (StringUtils.isEmpty(connectionName)) {
         throw new IllegalArgumentException("The connection name was null or empty.")
       }
 
       var namedTransaction: Transaction = null
       val properties = new DaoProperties(connectionName)
       val url = properties.getProperty(PROPERTY_URL)
+      if (url isEmpty) throw new IllegalArgumentException("You are missing a required property called[" + connectionName + ".url] in the dao.properties file.")
       val driverClassName = properties.getProperty(PROPERTY_DRIVER)
       val password = properties.getProperty(PROPERTY_PASSWORD)
       val username = properties.getProperty(PROPERTY_USERNAME)
@@ -437,6 +440,25 @@ object Transaction {
     }
   }
 
+  /**
+   * Closes all transactions for the JVM and releases all the transaction
+   * resources, used primarily if you want to ensure you are starting
+   * with a clean slate, like as part of the tearDown from a unit test.
+   *
+   */
+  def closeAll {
+    logger.info("inside CloseAll.")
+    val transactionObjects = transactions.values
+    for (transaction <- transactionObjects) yield {
+      val current = transaction.threadLocal.get()
+      if (current != null) {
+        logger.info("Closing transaction by setting isolation level back to its default value and closing the connection.")
+        current.connection.setTransactionIsolation(current.defaultTransactionIsolation) //Put back the default isolation level
+        transaction.close(current.connection)
+      }
+    }
+    this.transactions = transactions.empty
+  }
 }
 
 sealed trait IsolationLevel {

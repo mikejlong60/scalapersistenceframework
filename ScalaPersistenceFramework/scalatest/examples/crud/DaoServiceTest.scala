@@ -16,7 +16,6 @@
 package examples.crud
 
 import java.util.logging.Logger
-
 import org.scalapersistenceframework.PersistentOperationType
 import org.scalapersistenceframework.Required
 import org.scalapersistenceframework.TRANSACTION_READ_COMMITTED
@@ -25,13 +24,21 @@ import org.scalapersistenceframework.TransactionPropagation
 import org.scalapersistenceframework.service.DaoService
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.FunSuite
+import org.scalapersistenceframework.DataSourceConfigurer
+import org.springframework.mock.jndi.SimpleNamingContextBuilder
+import org.scalapersistenceframework.Transaction
 
-class DaoServiceTest extends FunSuite with BeforeAndAfterEach with DataSourceConfigurer {
-  val logger = Logger.getLogger(this.getClass().getName())
+class DaoServiceTest extends FunSuite with DataSourceConfigurer with BeforeAndAfterEach {
+  override val logger = Logger.getLogger(this.getClass().getName())
 
   override def beforeEach {
     super.configureJndi
   }
+
+  override def afterEach {
+    super.cleanupTransactions
+  }
+
 
   /**
    * The following "implicit" mechanism allows you to express transactional behavior at three levels:

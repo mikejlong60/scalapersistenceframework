@@ -18,12 +18,12 @@
 package examples.crud
 
 import java.util.logging.Logger
-
 import org.scalapersistenceframework.DefaultTransactionPrefs.transIsolationLevel
 import org.scalapersistenceframework.PersistentOperationType
 import org.scalapersistenceframework.Transaction
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.FunSuite
+import org.scalapersistenceframework.DataSourceConfigurer
 
 /**
  * All these test functions show how to use a DAO by itself wrapped in a transaction. You shouldn't do it
@@ -31,11 +31,15 @@ import org.scalatest.FunSuite
  * "enclose" method like in the DaoService class or in the OrderService example.
  */
 
-class OrderDaoTest extends FunSuite with BeforeAndAfterEach with DataSourceConfigurer {
-  val logger = Logger.getLogger(this.getClass().getName())
+class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfterEach {
+  override val logger = Logger.getLogger(this.getClass().getName())
 
   override def beforeEach {
     super.configureJndi
+  }
+
+  override def afterEach {
+    super.cleanupTransactions
   }
 
   test("Test nullable column setting using an Option") {

@@ -16,26 +16,29 @@
 package examples.crud
 
 import java.util.logging.Logger
-
 import org.scalapersistenceframework.Required
 import org.scalapersistenceframework.TRANSACTION_READ_COMMITTED
 import org.scalapersistenceframework.TransactionPropagation
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.FunSuite
-
 import examples.crud.AddressService.DefaultAddressServiceTransactionPrefs.transIsolationLevel
 import examples.crud.AddressService.DefaultAddressServiceTransactionPrefs.transPropagation
+import org.scalapersistenceframework.DataSourceConfigurer
 
 object LocalTransactionPrefs {
   implicit val transPropagation = new TransactionPropagation with Required
   implicit val transIsolationLevel = TRANSACTION_READ_COMMITTED
 }
 
-class CombinatorialBusinessServiceTest extends FunSuite with BeforeAndAfterEach with DataSourceConfigurer {
-  val logger = Logger.getLogger(this.getClass().getName())
+class CombinatorialBusinessServiceTest extends FunSuite with DataSourceConfigurer with BeforeAndAfterEach {
+  override val logger = Logger.getLogger(this.getClass().getName())
 
   override def beforeEach {
     super.configureJndi
+  }
+
+  override def afterEach {
+    super.cleanupTransactions
   }
 
   test("Test that transactional behavior allows you to override specfically when not in the context of an owning transaaction")({

@@ -22,18 +22,22 @@ import org.scalapersistenceframework.Transaction
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.FunSuite
 
-import examples.crud.DataSourceConfigurer
+import org.scalapersistenceframework.DataSourceConfigurer
 
 /**
  * All these test functions show how to use a DAO by itself wrapped in a transaction. You shouldn't do it
  * this way in your code. Instead you should enclose it in a TransactionPropagation trait
  * "enclose" method like in the DaoService class or in the OrderService example.
  */
-class OrderStoredProcedureDaoTest extends FunSuite with BeforeAndAfterEach with DataSourceConfigurer {
-  val logger = Logger.getLogger(this.getClass().getName())
+class OrderStoredProcedureDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfterEach {
+  override val logger = Logger.getLogger(this.getClass().getName())
 
   override def beforeEach {
     super.configureJndi
+  }
+
+  override def afterEach {
+    super.cleanupTransactions
   }
 
   test("Test a Stored procedure") {

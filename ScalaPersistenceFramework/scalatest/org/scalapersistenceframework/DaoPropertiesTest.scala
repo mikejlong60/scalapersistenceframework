@@ -35,7 +35,7 @@ class DaoPropertiesTest extends FunSuite {
   }
 
   test("Test the constructor with a bad prefix") {
-    val properties = new DaoProperties("bogus")
+    val properties = new DaoProperties("bogus.jdbc")
     logger.info(properties.toString())
     val result = properties.getProperty("driver")
     expectResult(None) { result }

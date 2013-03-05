@@ -1,36 +1,41 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2013 Michael J Long
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ***************************************************************************** */
+ * ****************************************************************************
+ */
 package org.scalapersistenceframework
 
 import org.scalatest.FunSuite
 import LocalTransactionPrefs._
 import java.util.logging.Logger
 import org.scalatest.BeforeAndAfterEach
-import examples.crud.DataSourceConfigurer
 
 object LocalTransactionPrefs {
   implicit val trans = new TransactionPropagation with Required
   implicit val transIsolationLevel = TRANSACTION_READ_COMMITTED
 }
 
-class TransactionTest extends FunSuite with BeforeAndAfterEach with DataSourceConfigurer {
-  val logger = Logger.getLogger(this.getClass().getName())
+class TransactionTest extends FunSuite with DataSourceConfigurer with BeforeAndAfterEach {
+  override val logger = Logger.getLogger(this.getClass().getName())
 
   override def beforeEach {
     super.configureJndi
+  }
+
+  override def afterEach {
+    super.cleanupTransactions
   }
 
   test("Make sure all instances of Transaction point to same underlying object") {
@@ -115,10 +120,9 @@ class TransactionTest extends FunSuite with BeforeAndAfterEach with DataSourceCo
   }
 
   test("Test getting instance for non-configured data source") {
-    Transaction.configure("bogus.jdbc")
-    val trans2 = Transaction.getInstance(Some("bogus.jndi"))
-    assert(trans2 match { case _: DriverManagerTransaction => true case _ => false }, "Wrong kind of transaction. Should have been a DriverManagerTransaction")
-
+    intercept[IllegalArgumentException] {
+      Transaction.configure("bogus.jdbc")
+    }
   }
 
 }
