@@ -102,14 +102,13 @@ trait CrudDao[T <: GridCapableEntity] extends BasicDao {
     var connection: Connection = null
     var preparedStatement: PreparedStatement = null
     var resultSet: ResultSet = null
-    var result = Set[T]()
 
     try {
       connection = Transaction.getInstance(connectionName).getConnectionForTransaction
       preparedStatement = prepareStatement(connection, sql, false, values)
       resultSet = preparedStatement.executeQuery
 
-      result = new Iterator[T] {
+      new Iterator[T] {
         def hasNext = {
           resultSet.next()
         }
@@ -120,7 +119,6 @@ trait CrudDao[T <: GridCapableEntity] extends BasicDao {
     } finally {
       close(preparedStatement, resultSet)
     }
-    result
   }
 
   /**

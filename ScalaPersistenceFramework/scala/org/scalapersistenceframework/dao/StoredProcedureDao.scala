@@ -42,7 +42,6 @@ trait StoredProcedureDao extends BasicDao {
     var connection: Connection = null
     var callableStatement: CallableStatement = null
     var resultSet: ResultSet = null
-    var result = Set[T]()
     var vo: Option[T] = None
 
     try {
@@ -54,7 +53,7 @@ trait StoredProcedureDao extends BasicDao {
         case resultSet: ResultSet => resultSet
         case _ => throw new ClassCastException("Not a supported return type. Currently only supports a refCursor that is a JDBC ResultSet.")
       }
-      result = new Iterator[T] {
+      new Iterator[T] {
         def hasNext = {
           resultSet.next()
         }
@@ -66,6 +65,5 @@ trait StoredProcedureDao extends BasicDao {
     } finally {
       close(callableStatement, resultSet)
     }
-    result
   }
 }
