@@ -38,6 +38,10 @@ trait DataSourceConfigurer {
     Transaction.configure("postgres.jndi")
   }
 
+  def configureJdbc {
+    Transaction.configure("postgres.jdbc")
+  }
+
   def cleanupTransactions {
     Transaction.closeAll
   }

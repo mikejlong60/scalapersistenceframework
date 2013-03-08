@@ -16,6 +16,7 @@
 	<property name="sourcejar.file" value="${basedir}/${name.version}-source.jar" />
 	<property name="testsourcejar.file" value="${basedir}/${name.version}-testsource.jar" />
 	<property name="build.test.classes.dir" value="${build.dir}/test/classes" />
+	<property name="testjar.file" value="${basedir}/${name.version}-tests.jar" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
 	<property name="build.reports.xml.dir" value="${build.dir}/reports/xml" />
 	<property name="build.reports.html.dir" value="${build.dir}/reports/html" />
@@ -176,6 +177,15 @@
 	<target name="testsourcejar" depends="init.scala">
 		<jar jarfile="${testsourcejar.file}" >
 			<fileset dir="${scalatest.dir}"/>
+		</jar>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Makes the jUnit tests jar                                           -->
+	<!-- =================================================================== -->
+	<target name="testjar" depends="compile.scala-tests">
+		<jar jarfile="${testjar.file}" >
+			<fileset dir="${build.test.classes.dir}"/>
 		</jar>
 	</target>
 
