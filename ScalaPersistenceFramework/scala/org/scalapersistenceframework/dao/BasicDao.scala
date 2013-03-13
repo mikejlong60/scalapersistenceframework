@@ -38,14 +38,115 @@ trait BasicDao {
   val connectionName: Option[String] = None
 
   /**
-   * This method takes a numeric Short column and properly returns null if the
-   * column in the database is null.
+   * This method returns a String object from a sql String column. 
    *
    * @param resultSet
    *            the result set
    * @param columnName
-   *            the name of the numeric Short column in the result set
-   * @return either null or the value of the numeric column.
+   *            the name of the sql String column in the result set
+   * @return the column as a Scala object.
+   * @throws SQLException
+   */
+  protected def nonNullableString(resultSet: ResultSet, columnName: String): String = {
+    resultSet.getString(columnName)
+  }
+
+  /**
+   * This method returns None if the column in the database is null. Otherwise
+   * it returns an Option of the given type.
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the column in the result set
+   * @return either None or Option[the Given Type]
+   * @throws SQLException
+   */
+  protected def nullableString(resultSet: ResultSet, columnName: String) = {
+    getAsOption[String]({ resultSet.getString(columnName) }, resultSet)
+  }
+
+  /**
+   * This method returns a java.sql.Timestamp object from a sql Timestamp column. 
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the sql Timestamp column in the result set
+   * @return the column as a Scala object.
+   * @throws SQLException
+   */
+  protected def nonNullableTimestamp(resultSet: ResultSet, columnName: String): java.sql.Timestamp = {
+    resultSet.getTimestamp(columnName)
+  }
+
+  /**
+   * This method returns None if the column in the database is null. Otherwise
+   * it returns an Option of the given type.
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the column in the result set
+   * @return either None or Option[the Given Type]
+   * @throws SQLException
+   */
+  protected def nullableTimestamp(resultSet: ResultSet, columnName: String) = {
+    getAsOption[java.sql.Timestamp]({ resultSet.getTimestamp(columnName) }, resultSet)
+  }
+
+  /**
+   * This method returns a java.sql.Date object from a sql Date column. 
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the sql Date column in the result set
+   * @return the column as a Scala object.
+   * @throws SQLException
+   */
+  protected def nonNullableDate(resultSet: ResultSet, columnName: String): java.sql.Date = {
+    resultSet.getDate(columnName)
+  }
+
+  /**
+   * This method returns None if the column in the database is null. Otherwise
+   * it returns an Option of the given type.
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the column in the result set
+   * @return either None or Option[the Given Type]
+   * @throws SQLException
+   */
+  protected def nullableDate(resultSet: ResultSet, columnName: String) = {
+    getAsOption[java.sql.Date]({ resultSet.getDate(columnName) }, resultSet)
+  }
+
+  /**
+   * This method returns a Short object from a sql numeric column. 
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the sql Short column in the result set
+   * @return the column as a Scala object.
+   * @throws SQLException
+   */
+  protected def nonNullableShort(resultSet: ResultSet, columnName: String): Short = {
+    resultSet.getShort(columnName)
+  }
+
+  /**
+   * This method returns None if the column in the database is null. Otherwise
+   * it returns an Option of the given type.
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the column in the result set
+   * @return either None or Option[the Given Type]
    * @throws SQLException
    */
   protected def nullableShort(resultSet: ResultSet, columnName: String) = {
@@ -53,14 +154,28 @@ trait BasicDao {
   }
 
   /**
-   * This method takes a numeric Double column and properly returns null if
-   * the column in the database is null.
+   * This method returns a Double object from a sql Double column. 
    *
    * @param resultSet
    *            the result set
    * @param columnName
-   *            the name of the numeric Double column in the result set
-   * @return either null or the value of the numeric column.
+   *            the name of the sql Double column in the result set
+   * @return the column as a Scala object.
+   * @throws SQLException
+   */
+  protected def nonNullableDouble(resultSet: ResultSet, columnName: String): Double = {
+    resultSet.getDouble(columnName)
+  }
+
+  /**
+   * This method returns None if the column in the database is null. Otherwise
+   * it returns an Option of the given type.
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the column in the result set
+   * @return either None or Option[the Given Type]
    * @throws SQLException
    */
   protected def nullableDouble(resultSet: ResultSet, columnName: String) = {
@@ -68,14 +183,28 @@ trait BasicDao {
   }
 
   /**
-   * This method takes a numeric Float column and properly returns null if the
-   * column in the database is null.
+   * This method returns a Float object from a sql Float column. 
    *
    * @param resultSet
    *            the result set
    * @param columnName
-   *            the name of the numeric Float column in the result set
-   * @return either null or the value of the numeric column.
+   *            the name of the sql Float column in the result set
+   * @return the column as a Scala object.
+   * @throws SQLException
+   */
+  protected def nonNullableFloat(resultSet: ResultSet, columnName: String): Float = {
+    resultSet.getFloat(columnName)
+  }
+
+  /**
+   * This method returns None if the column in the database is null. Otherwise
+   * it returns an Option of the given type.
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the column in the result set
+   * @return either None or Option[the Given Type]
    * @throws SQLException
    */
   protected def nullableFloat(resultSet: ResultSet, columnName: String) = {
@@ -83,14 +212,28 @@ trait BasicDao {
   }
 
   /**
-   * This method takes a numeric Long column and properly returns null if the
-   * column in the database is null.
+   * This method returns a Long object from a sql Long column. 
    *
    * @param resultSet
    *            the result set
    * @param columnName
-   *            the name of the numeric Long column in the result set
-   * @return either null or the value of the numeric column.
+   *            the name of the sql Long column in the result set
+   * @return the column as a Scala object.
+   * @throws SQLException
+   */
+  protected def nonNullableLong(resultSet: ResultSet, columnName: String): Long = {
+    resultSet.getLong(columnName)
+  }
+
+  /**
+   * This method returns None if the column in the database is null. Otherwise
+   * it returns an Option of the given type.
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the column in the result set
+   * @return either None or Option[the Given Type]
    * @throws SQLException
    */
   protected def nullableLong(resultSet: ResultSet, columnName: String): Option[Long] = {
@@ -106,14 +249,28 @@ trait BasicDao {
   }
 
   /**
-   * This method takes a numeric Integer column and properly returns null if
-   * the column in the database is null.
+   * This method returns a Integer object from a sql Int column. 
    *
    * @param resultSet
    *            the result set
    * @param columnName
-   *            the name of the numeric Integer column in the result set
-   * @return either null or the value of the numeric column.
+   *            the name of the sql Int column in the result set
+   * @return the column as a Scala object.
+   * @throws SQLException
+   */
+  protected def nonNullableInteger(resultSet: ResultSet, columnName: String): Integer = {
+    resultSet.getInt(columnName)
+  }
+
+  /**
+   * This method returns None if the column in the database is null. Otherwise
+   * it returns an Option of the given type.
+   *
+   * @param resultSet
+   *            the result set
+   * @param columnName
+   *            the name of the column in the result set
+   * @return either None or Option[the Given Type]
    * @throws SQLException
    */
   protected def nullableInteger(resultSet: ResultSet, columnName: String): Option[Integer] = {
@@ -121,30 +278,30 @@ trait BasicDao {
   }
 
   /**
-   * This method takes a String boolean (Y or N) column and returns false if
-   * the column in the database is null. Otherwise it returns true or false.
+   * This method returns false if the column in the database is null. Otherwise it returns true or false
+   * based upon the evaluation of the implicit RDBMSBooleanHandler.
    *
    * @param resultSet
    *            the result set
    * @param columnName
-   *            the name of the String (Y or N) column in the result set
+   *            the name of the column in the result set
    * @return either true or false
    * @throws SQLException
    */
-  protected def nonNullableBoolean(resultSet: ResultSet, columnName: String)(implicit booleanHandler: RDBMSBooleanHandler) = {
+  protected def nonNullableBoolean(resultSet: ResultSet, columnName: String)(implicit booleanHandler: RDBMSBooleanHandler): Boolean = {
     booleanHandler.nonNullableBoolean(resultSet, columnName)
   }
 
   /**
-   * This method takes a String boolean (Y or N) column and properly returns
-   * null if the column in the database is null. Otherwise it returns true or
-   * false.
+   * This method returns None if the column in the database if null. Otherwise
+   * it returns an Option[Boolean] based upon the evaluation of the implicit 
+   * RDBMSBooleanHandler.
    *
    * @param resultSet
    *            the result set
    * @param columnName
-   *            the name of the String (Y or N) column in the result set
-   * @return either null or true or false.
+   *            the name of the column in the result set
+   * @return either None or Option[Boolean]
    * @throws SQLException
    */
   protected def nullableBoolean(resultSet: ResultSet, columnName: String)(implicit booleanHandler: RDBMSBooleanHandler): Option[Boolean] = {

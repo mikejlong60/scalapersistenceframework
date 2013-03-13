@@ -32,6 +32,8 @@ class OrderStoredProcedureDao(override val connectionName: Option[String]) exten
     this.executeStoredProcedureThatIteratesOverRefCursor(() => "{ ? = call samplerefcursorfunc() }", mapForOrderQuery, List())
   }
 
-  private def mapForOrderQuery(rs: ResultSet) = Some(new Order(rs.getLong("id"), rs.getLong("customer_id"), rs.getString("description"), nullableBoolean(rs, "complete"), rs.getInt("approved") match { case 1 => true case 0 => false }, None, nullableInteger(rs, "order_qty"), rs.getTimestamp("created_ts"), rs.getTimestamp("updated_ts"), true))
+  private def mapForOrderQuery(resultSet: ResultSet) = Some(
+          new Order(nonNullableLong(resultSet,"id"), nonNullableLong(resultSet,"customer_id"), nullableString(resultSet,"description"), nullableBoolean(resultSet, "complete"), nonNullableBoolean(resultSet,"approved"), None, nullableInteger(resultSet, "order_qty"), nonNullableTimestamp(resultSet,"created_ts"), nonNullableTimestamp(resultSet,"updated_ts"), nonNullableBoolean(resultSet,"persistent"))
+)
   
 }

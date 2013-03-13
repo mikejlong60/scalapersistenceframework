@@ -56,7 +56,7 @@ class TransactionLoadTest extends FunSuite with DataSourceConfigurer with Before
 
   test("Execute a bunch of destructive operations among a pool of threads") {
     val service = new DaoService(new OrderDao);
-    val pk = service.insert(new Order(null, 2, "Big Order", None, false, null, Some(12), null, null, false))
+    val pk = service.insert(new Order(null, 2, Some("Big Order"), None, false, null, Some(12), null, null, false))
 
     result = service.findByPk(List(pk))
     logger.info(result.toString())
@@ -105,7 +105,7 @@ class ConcurrentTransactionActor extends Actor {
             val service = new DaoService(new OrderDao);
             var order: Order = TransactionLoadTest.result.get
             val description = random.nextLong.toString
-            order.description = description
+            order.description = Some(description)
             service.update(order)
             order = service.findByPk(List(order.id)).get
 

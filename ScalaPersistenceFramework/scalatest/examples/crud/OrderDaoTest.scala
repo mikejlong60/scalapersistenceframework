@@ -43,7 +43,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
   }
 
   test("Test nullable column setting using an Option") {
-    var result = new Order(null, 2, "Big Order", None, false, null, None, null, null, false)
+    var result = new Order(null, 2, Some("Big Order"), None, false, null, None, null, null, false)
     logger.info(result.toString())
     val dao = new OrderDao();
     //Insert a new row
@@ -101,7 +101,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
   }
 
   test("Test JNDI configuration using Spring Mock JNDI container") {
-    var result = new Order(null, 2, "Big Order", None, false, null, Some(6), null, null, false)
+    var result = new Order(null, 2, Some("Big Order"), None, false, null, Some(6), null, null, false)
     logger.info(result.toString())
     val dao = new OrderDao();
     Transaction.getInstance.start(None, "fred")
@@ -123,7 +123,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
     Transaction.getInstance.commit("fred")
     Transaction.getInstance.end(None, "fred")
 
-    result.description = "updated description"
+    result.description = Some("updated description")
     Transaction.getInstance.start(None, "fred")
     result.complete = Some(true)
     result.approved = true
@@ -162,7 +162,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
   }
 
   test("Make sure that you can configure more than one connection to the database") {
-    var result = new Order(null, 2, "Big Order", None, false, null, Some(5), null, null, false)
+    var result = new Order(null, 2, Some("Big Order"), None, false, null, Some(5), null, null, false)
     logger.info(result.toString())
     val dao = new OrderDao();
     Transaction.getInstance(Some("postgres.jndi")).start(Some("postgres.jndi"), "fred")
@@ -186,7 +186,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
 
     //Try another connection
     Transaction.configure("postgres.jdbc")
-    result = new Order(null, 2, "Big Order", None, false, null, Some(3), null, null, false)
+    result = new Order(null, 2, Some("Big Order"), None, false, null, Some(3), null, null, false)
     logger.info(result.toString())
     Transaction.getInstance(Some("postgres.jdbc")).start(Some("postgres.jdbc"), "fred")
     val dao2 = new OrderDao(Some("postgres.jdbc"))

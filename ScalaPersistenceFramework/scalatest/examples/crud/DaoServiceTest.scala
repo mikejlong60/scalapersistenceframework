@@ -66,7 +66,7 @@ class DaoServiceTest extends FunSuite with DataSourceConfigurer with BeforeAndAf
   //  implicit val transIsolationLevel = TRANSACTION_READ_COMMITTED
 
   test("Test API of DAO service using a JNDI connection pool for a specific DAO class")({
-    var result = new Order(null, 2, "Big Order", None, false, null, Some(1), null, null, false)
+    var result = new Order(null, 2, Some("Big Order"), None, false, None, Some(1), null, null, false)
     logger.info(result.toString())
     val service = new DaoService(new OrderDao);
     val pk = service.insert(result)
@@ -75,14 +75,14 @@ class DaoServiceTest extends FunSuite with DataSourceConfigurer with BeforeAndAf
     expectResult(pk) { result.id }
     expectResult(None) { result.complete }
     expectResult(2) { result.customerId }
-    expectResult("Big Order") { result.description }
+    expectResult(Some("Big Order")) { result.description }
     expectResult(1) { result.orderQty.orNull }
     expectResult(true) { result.persistent }
     assert(result.createdTs != null)
     assert(result.updatedTs != null)
     expectResult(false) { result.approved }
 
-    result.description = "updated description"
+    result.description = Some("updated description")
     result.complete = Some(true)
     result.approved = true
     service.update(result)(new TransactionPropagation with Required, TRANSACTION_REPEATABLE_READ)
@@ -90,7 +90,7 @@ class DaoServiceTest extends FunSuite with DataSourceConfigurer with BeforeAndAf
     expectResult(pk) { result.id }
     expectResult(Some(true)) { result.complete }
     expectResult(2) { result.customerId }
-    expectResult("updated description") { result.description }
+    expectResult(Some("updated description")) { result.description }
     assert(result.createdTs != null)
     assert(result.updatedTs != null)
     expectResult(true) { result.approved }
@@ -105,7 +105,7 @@ class DaoServiceTest extends FunSuite with DataSourceConfigurer with BeforeAndAf
   })
 
   test("Test Save method of DAO service using a JNDI connection pool for a specific DAO class")({
-    var result = new Order(null, 2, "Big Order", None, false, null, Some(1), null, null, false)
+    var result = new Order(null, 2, Some("Big Order"), None, false, null, Some(1), null, null, false)
     logger.info(result.toString())
     val service = new DaoService(new OrderDao);
     val pk = service.insert(result)

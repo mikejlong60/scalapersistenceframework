@@ -51,7 +51,7 @@ class CombinatorialBusinessServiceTest extends FunSuite with DataSourceConfigure
   })
 
   test("Test API of Combinatorial service using a JNDI connection pool for a specific DAO class")({
-    var order = new Order(null, 2, "Big Order", None, false, null, Some(1), null, null, false)
+    var order = new Order(null, 2, Some("Big Order"), None, false, null, Some(1), null, null, false)
     var address = new Address(6, "Home Address", "123 Stribling Lane", "", "Virginia", "22656", null, null, false)
     val orderService = new OrderService(new OrderDao);
     val addressService = new AddressService(new AddressDao);
@@ -64,7 +64,7 @@ class CombinatorialBusinessServiceTest extends FunSuite with DataSourceConfigure
     expectResult(pk) { order.id }
     expectResult(None) { order.complete }
     expectResult(2) { order.customerId }
-    expectResult("Big Order") { order.description }
+    expectResult("Big Order") { order.description.get }
     expectResult(1) { order.orderQty.orNull }
     assert(order.createdTs != null)
     assert(order.updatedTs != null)

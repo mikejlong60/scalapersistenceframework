@@ -52,6 +52,22 @@ trait RDBMSBooleanHandler {
    * @throws SQLException
    */
   def nullableBoolean(resultSet: ResultSet, columnName: String): Option[Boolean]
+  
+  /**
+   * This method takes an Option[Boolean] and turns
+   * it into its SQL representation for storing in the database.
+   * @param the value to convert to the database's format
+   * @return Either null for None or the application-specific representation of true or false
+   */
+  def booleanOption2Sql(x: Option[Boolean]):Any
+
+  /**
+   * This method takes a Boolean and turns
+   * it into its SQL representation for storing in the database.
+   * @param the value to convert to the database's format
+   * @return the application-specific representation of true or false
+   */
+  def boolean2Sql(x: Boolean): Any
 }
 
 trait StringRDBMSBooleanHandler extends RDBMSBooleanHandler {
@@ -84,11 +100,37 @@ trait StringRDBMSBooleanHandler extends RDBMSBooleanHandler {
    * @throws SQLException
    */
   def nullableBoolean(resultSet: ResultSet, columnName: String): Option[Boolean] = {
-    val value = resultSet.getInt(columnName)
+    val charValue = resultSet.getString(columnName)
     if (resultSet.wasNull()) {
       None
     } else {
-      Some(if (value == 1) true else false)
+      Some(if (charValue.equalsIgnoreCase("Y")) true else false)
+    }
+  }
+  /**
+   * This method takes an Option[Boolean] and turns
+   * it into its SQL representation for storing in the database.
+   * @param the value to convert to the database's format
+   * @return Either null for None, Y for true, or N for false 
+   */
+  def booleanOption2Sql(x: Option[Boolean]) = {
+    x match {
+      case Some(true) => "Y"
+      case Some(false) => "N"
+      case None => null
+    }
+  }
+
+  /**
+   * This method takes a Boolean and turns
+   * it into its SQL representation for storing in the database.
+   * @param the value to convert to the database's format
+   * @return Y for true, or N for false 
+   */
+  def boolean2Sql(x: Boolean) = {
+    x match {
+      case true => "Y"
+      case false => "N"
     }
   }
 }
@@ -130,6 +172,33 @@ trait IntRDBMSBooleanHandler extends RDBMSBooleanHandler {
       None
     } else {
       Some(if (value == 1) true else false)
+    }
+  }
+  
+  /**
+   * This method takes an Option[Boolean] and turns
+   * it into its SQL representation for storing in the database.
+   * @param the value to convert to the database's format
+   * @return Either null for None, 1 for true, or 0 for false 
+   */
+  def booleanOption2Sql(x: Option[Boolean]) = {
+    x match {
+      case Some(true) => 1
+      case Some(false) => 0
+      case None => null
+    }
+  }
+
+  /**
+   * This method takes a Boolean and turns
+   * it into its SQL representation for storing in the database.
+   * @param the value to convert to the database's format
+   * @return 1 for true, or 0 for false 
+   */
+  def boolean2Sql(x: Boolean) = {
+    x match {
+      case true => 1
+      case false => 0
     }
   }
 }

@@ -17,15 +17,13 @@ package examples.query
 
 import java.sql.ResultSet
 import java.util.logging.Logger
-
 import scala.collection.immutable.List
-
 import org.scalapersistenceframework.dao.CrudDao
 import org.scalapersistenceframework.dao.DefaultBooleanHandler.booleanHandler
 import org.scalapersistenceframework.dao.QueryDao
-
 import examples.crud.Address
 import examples.crud.Order
+import org.scalapersistenceframework.dao.RDBMSBooleanHandler
 
 class AddressDaoWithCustomQueries(override val connectionName: Option[String]) extends CrudDao[Address] with QueryDao {
   override val logger = Logger.getLogger(this.getClass().getName())
@@ -51,12 +49,12 @@ class AddressDaoWithCustomQueries(override val connectionName: Option[String]) e
    *             If something fails at database level.
    */
   override def mapForSelect(resultSet: ResultSet): Address = {
-    new Address(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getString("line1"), resultSet.getString("line2"), resultSet.getString("state"), resultSet.getString("zipcode"), resultSet.getTimestamp("created_ts"), resultSet.getTimestamp("updated_ts"), resultSet.getInt("persistent") match { case 1 => true case _ => false })
+    new Address(nonNullableLong(resultSet,"id"), nonNullableString(resultSet,"name"), nonNullableString(resultSet,"line1"), nonNullableString(resultSet,"line2"), nonNullableString(resultSet,"state"), nonNullableString(resultSet,"zipcode"), nonNullableTimestamp(resultSet,"created_ts"), nonNullableTimestamp(resultSet,"updated_ts"), nonNullableBoolean(resultSet,"persistent"))
   }
-  override def mapForUpdate(vo: Address): List[Any] = {
+  override def mapForUpdate(vo: Address)(implicit booleanHandler: RDBMSBooleanHandler): List[Any] = {
     List(vo.name, vo.line1, vo.line2, vo.state, vo.zipcode, vo.id)
   }
-  override def mapForInsert(vo: Address): List[Any] = {
+  override def mapForInsert(vo: Address)(implicit booleanHandler: RDBMSBooleanHandler): List[Any] = {
     List(vo.id, vo.name, vo.line1, vo.line2, vo.state, vo.zipcode)
   }
   override def mapForDelete(vo: Address): List[Any] = {
@@ -74,7 +72,8 @@ class AddressDaoWithCustomQueries(override val connectionName: Option[String]) e
   }
 
   def mapForOrderQuery(resultSet: ResultSet): Option[Order] =
-    Some(new Order(resultSet.getLong("id"), resultSet.getLong("customer_id"), resultSet.getString("description"), nullableBoolean(resultSet, "complete"), resultSet.getInt("approved") match { case 1 => true case 0 => false }, None, nullableInteger(resultSet, "order_qty"), resultSet.getTimestamp("created_ts"), resultSet.getTimestamp("updated_ts"), resultSet.getInt("persistent") match { case 1 => true case _ => false }))
+    Some(new Order(nonNullableLong(resultSet,"id"), nonNullableLong(resultSet,"customer_id"), nullableString(resultSet,"description"), nullableBoolean(resultSet, "complete"), nonNullableBoolean(resultSet,"approved"), None, nullableInteger(resultSet, "order_qty"), nonNullableTimestamp(resultSet,"created_ts"), nonNullableTimestamp(resultSet,"updated_ts"), nonNullableBoolean(resultSet,"persistent"))
+)
 
   def getOrderQuery(): String = { "select id, customer_id, description, complete, approved, order_qty, created_ts, updated_ts, 1 as persistent from spf.order where description like(?)" }
 

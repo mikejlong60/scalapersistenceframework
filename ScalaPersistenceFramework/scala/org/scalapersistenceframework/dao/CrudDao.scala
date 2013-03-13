@@ -24,6 +24,8 @@ import java.util.logging.Logger
 
 import org.scalapersistenceframework.GridCapableEntity
 import org.scalapersistenceframework.Transaction
+import org.scalapersistenceframework.dao.DefaultBooleanHandler._
+
 /**
  * This class is a data access object that provides basic CRUD operations
  * for a single database table.
@@ -268,12 +270,12 @@ trait CrudDao[T <: GridCapableEntity] extends BasicDao {
   /**
    * Set the list of objects that are parameters to the update statement.
    */
-  protected def mapForUpdate(vo: T): List[Any]
+  protected def mapForUpdate(vo: T)(implicit booleanHandler: RDBMSBooleanHandler): List[Any]
 
   /**
    * Set the list of objects that are parameters to the insert statement.
    */
-  protected def mapForInsert(vo: T): List[Any]
+  protected def mapForInsert(vo: T)(implicit booleanHandler: RDBMSBooleanHandler): List[Any]
 
   /**
    * Set the list of objects that are parameters to the delete statement.
