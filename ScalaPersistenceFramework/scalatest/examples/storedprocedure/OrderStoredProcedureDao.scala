@@ -33,7 +33,7 @@ class OrderStoredProcedureDao(override val connectionName: Option[String]) exten
   }
 
   private def mapForOrderQuery(resultSet: ResultSet) = Some(
-          new Order(nonNullableLong(resultSet,"id"), nonNullableLong(resultSet,"customer_id"), nullableString(resultSet,"description"), nullableBoolean(resultSet, "complete"), nonNullableBoolean(resultSet,"approved"), None, nullableInteger(resultSet, "order_qty"), nonNullableTimestamp(resultSet,"created_ts"), nonNullableTimestamp(resultSet,"updated_ts"), nonNullableBoolean(resultSet,"persistent"))
+          new Order(nonNullableLong(resultSet,"id"), nonNullableLong(resultSet,"customer_id"), nullableString(resultSet,"description"), nullableBoolean(resultSet, "complete"), nonNullableBoolean(resultSet,"approved"), None, nullableInteger(resultSet, "order_qty"), nonNullableTimestamp(resultSet,"created_ts"), nonNullableTimestamp(resultSet,"updated_ts"), true)
 )
   
 }

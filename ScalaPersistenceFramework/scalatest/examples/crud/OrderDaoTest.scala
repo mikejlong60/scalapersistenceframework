@@ -58,7 +58,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
     expectResult(None) { result.complete }
     expectResult(2) { result.customerId }
     expectResult(null) { result.orderQty.orNull }
-    expectResult("Big Order") { result.description }
+    expectResult(Some("Big Order")) { result.description }
     assert(result.createdTs != null)
     assert(result.updatedTs != null)
     expectResult(false) { result.approved }
@@ -75,7 +75,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
     expectResult(None) { result.complete }
     expectResult(2) { result.customerId }
     expectResult(12) { result.orderQty.orNull }
-    expectResult("Big Order") { result.description }
+    expectResult(Some("Big Order")) { result.description }
     assert(result.createdTs != null)
     assert(result.updatedTs != null)
     expectResult(false) { result.approved }
@@ -91,7 +91,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
     expectResult(None) { result.complete }
     expectResult(2) { result.customerId }
     expectResult(null) { result.orderQty.orNull }
-    expectResult("Big Order") { result.description }
+    expectResult(Some("Big Order")) { result.description }
     assert(result.createdTs != null)
     assert(result.updatedTs != null)
     expectResult(false) { result.approved }
@@ -115,7 +115,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
     expectResult(None) { result.complete }
     expectResult(2) { result.customerId }
     expectResult(6) { result.orderQty.orNull }
-    expectResult("Big Order") { result.description }
+    expectResult(Some("Big Order")) { result.description }
     assert(result.createdTs != null)
     assert(result.updatedTs != null)
     expectResult(false) { result.approved }
@@ -138,7 +138,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
     expectResult(pk) { result.id }
     expectResult(Some(true)) { result.complete }
     expectResult(2) { result.customerId }
-    expectResult("updated description") { result.description }
+    expectResult(Some("updated description")) { result.description }
     assert(result.createdTs != null)
     assert(result.updatedTs != null)
     expectResult(true) { result.approved }
@@ -177,7 +177,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
     expectResult(pk) { result.id }
     expectResult(None) { result.complete }
     expectResult(2) { result.customerId }
-    expectResult("Big Order") { result.description }
+    expectResult(Some("Big Order")) { result.description }
     expectResult(PersistentOperationType.NONE) { result.persistentOperationType }
 
     assert(result.createdTs != null)
@@ -202,7 +202,7 @@ class OrderDaoTest extends FunSuite with DataSourceConfigurer with BeforeAndAfte
     expectResult(3) { result.orderQty.orNull }
     expectResult(None) { result.complete }
     expectResult(2) { result.customerId }
-    expectResult("Big Order") { result.description }
+    expectResult(Some("Big Order")) { result.description }
     assert(result.createdTs != null)
     assert(result.updatedTs != null)
     expectResult(false) { result.approved }
