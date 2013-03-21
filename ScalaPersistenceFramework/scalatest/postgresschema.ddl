@@ -7,7 +7,7 @@ CREATE OR REPLACE TABLE spf.order (
     description varchar(2000),
     complete numeric(1),
     approved numeric(1) not null,
-    order_qty integer,
+    order_qty ,
     created_ts timestamp not null,
     updated_ts timestamp not null
 );
