@@ -7,7 +7,7 @@ CREATE OR REPLACE TABLE spf.order (
     description varchar(2000),
     complete numeric(1),
     approved numeric(1) not null,
-    order_qty ,
+    order_qty number(32),
     created_ts timestamp not null,
     updated_ts timestamp not null
 );
@@ -15,7 +15,7 @@ CREATE OR REPLACE TABLE spf.order (
 drop table spf.address;
 
 CREATE TABLE spf.address (
-    id  integer not null primary key,
+    id  numeric(32) not null primary key,
     name varchar(2000) not null,
     line1 varchar(2000) not null,
     line2 varchar(2000) not null,
