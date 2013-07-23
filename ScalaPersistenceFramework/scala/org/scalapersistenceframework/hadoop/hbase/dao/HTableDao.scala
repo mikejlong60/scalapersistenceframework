@@ -34,15 +34,15 @@ import org.apache.hadoop.hbase.util.Bytes
 class HTableDao(val config: Configuration, val tableName: String) {
 
   // The following 
-  val admin = new HBaseAdmin(config)
-  val htd = new HTableDescriptor(tableName) //The HBase table name
-  val tableNameInternal = htd.getName() //Gets the table with the column family you specified. 
+  private val admin = new HBaseAdmin(config)
+  private val htd = new HTableDescriptor(tableName) //The HBase table name
+  private val tableNameInternal = htd.getName() //Gets the table with the column family you specified. 
 
-  val hTable = new HTable(config, tableNameInternal) //Initializes the reference to the table so we can do things to the 
+  private val hTable = new HTable(config, tableNameInternal) //Initializes the reference to the table so we can do things to the 
   //data that it holds. This is an expensive operation because it checks the HBase metadata to make sure the table
   //exists. 
   hTable.setAutoFlush(false)
-  val random = new Random(System.currentTimeMillis)
+  private val random = new Random(System.currentTimeMillis)
 
   /**
    * Return the contents of the HBase  table subject to the given scan.
