@@ -9,6 +9,7 @@
 	<property name="version" value="0.1" />
 	<property name="name.version" value="${name}-${version}" />
 
+	<property name="hadoop.lib.dir" value="${basedir}/libhadoop" />
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="testlib.dir" value="${basedir}/testlib" />
 	<property name="build.dir" value="${basedir}/build" />
@@ -38,6 +39,9 @@
 	    <property name="scala-compiler.jar" location="${scala.dir}/lib/scala-compiler.jar"/>
 	 
 	    <path id="scala.classpath">
+		    <fileset dir="${hadoop.lib.dir}">
+				<include name="*.jar" />
+		    </fileset>
 		    <fileset dir="${scala.dir}/lib">
 				<include name="*.jar" />
 		    </fileset>
