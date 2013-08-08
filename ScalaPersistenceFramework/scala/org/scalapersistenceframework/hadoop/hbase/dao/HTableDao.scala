@@ -1,24 +1,25 @@
-/*******************************************************************************
+/**
+ * *****************************************************************************
  * Copyright 2013 Functionicity LLC, All Rights Reserved
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ***************************************************************************** */
+ * ****************************************************************************
+ */
 package org.scalapersistenceframework.hadoop.hbase.dao
 
 import scala.collection.JavaConversions.asScalaIterator
 import scala.collection.JavaConversions.seqAsJavaList
 import scala.util.Random
-
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.HTableDescriptor
 import org.apache.hadoop.hbase.client.Delete
@@ -30,6 +31,7 @@ import org.apache.hadoop.hbase.client.Result
 import org.apache.hadoop.hbase.client.Row
 import org.apache.hadoop.hbase.client.Scan
 import org.apache.hadoop.hbase.util.Bytes
+import org.apache.hadoop.hbase.HColumnDescriptor
 
 class HTableDao(val config: Configuration, val tableName: String) {
 
@@ -164,6 +166,20 @@ class HTableDao(val config: Configuration, val tableName: String) {
     val result = hTable.checkAndPut(Bytes.toBytes(rowKey), Bytes.toBytes(columnGroup), Bytes.toBytes(columnName), Bytes.toBytes(valueToCompareAgainst), p)
     hTable.flushCommits
     result
+  }
+
+  /**
+   * Produces a list of the column families for the table that is attached to this DAO.
+   */
+  def getColumnFamily: List[HColumnDescriptor] = {
+    hTable.getTableDescriptor.getColumnFamilies.toList
+  }
+
+  /**
+   * Produces a list of all the tables in the current Hbase configuration.
+   */
+  def getTables: List[HTableDescriptor] = {
+    admin.listTables.toList
   }
 
 }

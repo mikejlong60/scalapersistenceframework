@@ -63,7 +63,7 @@ class HTableDaoTest extends FunSuite {
     expectResult(true) { rowKey.length > 10 }
 
     val result = orderDao.findByKey(rowKey)
-    expectResult(false) { result.isEmpty}
+    expectResult(false) { result.isEmpty }
   })
 
   test("Test deleteByKey")({
@@ -73,7 +73,7 @@ class HTableDaoTest extends FunSuite {
 
     orderDao.deleteByKey(rowKey)
     val result = orderDao.findByKey(rowKey)
-    expectResult(true) { result.isEmpty}
+    expectResult(true) { result.isEmpty }
   })
 
   test("Test Batch API")({
@@ -130,4 +130,27 @@ class HTableDaoTest extends FunSuite {
     expectResult(false) { orderDao.compareAndUpdate(rowKey, "orderFamily", "description", "Lowes wheelbarrow order update", "fred") }
   })
 
+  test("Test getColumnFamilies")({
+    val orderDao = new HTableDao(HBaseConfiguration.create(), "order")
+    orderDao.getColumnFamily.foreach(family => expectResult(true) {
+      family.getNameAsString match {
+        case "orderFamily" => true
+        case "addressFamily" => true
+        case "fred" => true
+        case _ => false
+      }
+    })
+  })
+
+  test("Test getTables")({
+    val orderDao = new HTableDao(HBaseConfiguration.create(), "order")
+    orderDao.getTables.foreach(table => expectResult(true) {
+      table.getNameAsString match {
+        case "order" => true
+        case "address" => true
+        case "maxtemperature" => true
+        case _ => false
+      }
+    })
+  })
 }
