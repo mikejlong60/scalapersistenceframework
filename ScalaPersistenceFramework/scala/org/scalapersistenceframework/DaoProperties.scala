@@ -53,8 +53,7 @@ class DaoProperties(val specificKey: String) {
    * with the given key(prefixed by the specificKey value you used to create the DaoProperties instance).
    *
    * @param key
-   *            The key to be associated with a DAOProperties instance
-   *            specific value.
+   *            The key to be associated with a DAOProperties instance specific value.
    * @return The DAOProperties instance specific property value associated
    *         with the given key or None.
    */
