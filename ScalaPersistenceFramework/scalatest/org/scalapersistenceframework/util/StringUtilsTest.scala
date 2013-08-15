@@ -28,4 +28,9 @@ class StringUtilsTest extends FunSuite {
     expectResult(true) { StringUtils.isEmpty("") }
   }
 
+  test("Test isNotEmpty") {
+    expectResult(false) { StringUtils.isNotEmpty(null) }
+    expectResult(true) { StringUtils.isNotEmpty("1") }
+    expectResult(false) { StringUtils.isNotEmpty("") }
+  }
 }

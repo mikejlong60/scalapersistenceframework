@@ -26,28 +26,28 @@ import org.apache.hadoop.io.{ BooleanWritable, IntWritable, LongWritable, FloatW
  */
 object SHadoop {
 
-  implicit def writable2boolean(value: BooleanWritable) = value.get
-  implicit def boolean2writable(value: Boolean) = new BooleanWritable(value)
+  implicit def writable2boolean(value: BooleanWritable): Boolean = value.get
+  implicit def boolean2writable(value: Boolean): BooleanWritable = new BooleanWritable(value)
 
-  implicit def writable2int(value: IntWritable) = value.get
-  implicit def int2writable(value: Int) = new IntWritable(value)
+  implicit def writable2int(value: IntWritable): Int = value.get
+  implicit def int2writable(value: Int): IntWritable = new IntWritable(value)
 
-  implicit def writable2long(value: LongWritable) = value.get
-  implicit def long2writable(value: Long) = new LongWritable(value)
+  implicit def writable2long(value: LongWritable): Long = value.get
+  implicit def long2writable(value: Long): LongWritable = new LongWritable(value)
 
-  implicit def writable2float(value: FloatWritable) = value.get
-  implicit def float2writable(value: Float) = new FloatWritable(value)
+  implicit def writable2float(value: FloatWritable): Float = value.get
+  implicit def float2writable(value: Float): FloatWritable = new FloatWritable(value)
 
-  implicit def text2string(value: Text) = value.toString
-  implicit def string2text(value: String) = new Text(value)
+  implicit def text2string(value: Text): String = value.toString
+  implicit def string2text(value: String): Text = new Text(value)
 
-  implicit def uft82string(value: UTF8) = value.toString
-  implicit def string2utf8(value: String) = new UTF8(value)
+  implicit def uft82string(value: UTF8): String = value.toString
+  implicit def string2utf8(value: String): UTF8 = new UTF8(value)
 
-  implicit def path2string(value: Path) = value.toString
-  implicit def string2path(value: String) = new Path(value)
+  implicit def path2string(value: Path): String = value.toString
+  implicit def string2path(value: String): Path = new Path(value)
 
-  implicit def javaIterator2Iterator[A](value: java.util.Iterator[A]) = new Iterator[A] {
+  implicit def javaIterator2Iterator[A](value: java.util.Iterator[A]): Iterator[A] = new Iterator[A] {
     def hasNext = value.hasNext
     def next = value.next
   }
@@ -55,7 +55,7 @@ object SHadoop {
   /**
    * Added by Mike Long to deal with implicit conversion from java.lang.Iterable
    */
-  implicit def javaIterable2Iterator[A](value: java.lang.Iterable[A]) = {
+  implicit def javaIterable2Iterator[A](value: java.lang.Iterable[A]): Iterator[A] = {
     val result: java.util.Iterator[A] = value.iterator
     new Iterator[A] {
       def hasNext = result.hasNext
@@ -63,7 +63,7 @@ object SHadoop {
     }
   }
 
-  implicit def javaIterator2BooleanIterator(value: java.util.Iterator[BooleanWritable]) = new Iterator[Boolean] {
+  implicit def javaIterator2BooleanIterator(value: java.util.Iterator[BooleanWritable]): Iterator[Boolean] = new Iterator[Boolean] {
     def hasNext = value.hasNext
     def next = value.next.get
   }
@@ -71,7 +71,7 @@ object SHadoop {
   /**
    * Added by Mike Long to deal with implicit conversion from java.lang.Iterable
    */
-  implicit def javaIterable2BooleanIterator(value: java.lang.Iterable[BooleanWritable]) = {
+  implicit def javaIterable2BooleanIterator(value: java.lang.Iterable[BooleanWritable]): Iterator[Boolean] = {
     val result = value.iterator
     new Iterator[Boolean] {
       def hasNext = result.hasNext
@@ -79,7 +79,7 @@ object SHadoop {
     }
   }
 
-  implicit def javaIterator2IntIterator(value: java.util.Iterator[IntWritable]) = new Iterator[Int] {
+  implicit def javaIterator2IntIterator(value: java.util.Iterator[IntWritable]): Iterator[Int] = new Iterator[Int] {
     def hasNext = value.hasNext
     def next = value.next.get
   }
@@ -87,7 +87,7 @@ object SHadoop {
   /**
    * Added by Mike Long to deal with implicit conversion from java.lang.Iterable
    */
-  implicit def javaIterable2IntIterator(value: java.lang.Iterable[IntWritable]) = {
+  implicit def javaIterable2IntIterator(value: java.lang.Iterable[IntWritable]): Iterator[Int] = {
     val result = value.iterator
     new Iterator[Int] {
       def hasNext = result.hasNext
@@ -95,7 +95,7 @@ object SHadoop {
     }
   }
 
-  implicit def javaIterator2LongIterator(value: java.util.Iterator[LongWritable]) = new Iterator[Long] {
+  implicit def javaIterator2LongIterator(value: java.util.Iterator[LongWritable]): Iterator[Long]  = new Iterator[Long] {
     def hasNext = value.hasNext
     def next = value.next.get
   }
@@ -103,7 +103,7 @@ object SHadoop {
   /**
    * Added by Mike Long to deal with implicit conversion from java.lang.Iterable
    */
-  implicit def javaIterable2LongIterator(value: java.lang.Iterable[LongWritable]) = {
+  implicit def javaIterable2LongIterator(value: java.lang.Iterable[LongWritable]): Iterator[Long] = {
     val result = value.iterator
     new Iterator[Long] {
       def hasNext = result.hasNext
@@ -111,7 +111,7 @@ object SHadoop {
     }
   }
 
-  implicit def javaIterator2FloatIterator(value: java.util.Iterator[FloatWritable]) = new Iterator[Float] {
+  implicit def javaIterator2FloatIterator(value: java.util.Iterator[FloatWritable]): Iterator[Float] = new Iterator[Float] {
     def hasNext = value.hasNext
     def next = value.next.get
   }
@@ -119,7 +119,7 @@ object SHadoop {
   /**
    * Added by Mike Long to deal with implicit conversion from java.lang.Iterable
    */
-  implicit def javaIterable2FloatIterator(value: java.lang.Iterable[FloatWritable]) = {
+  implicit def javaIterable2FloatIterator(value: java.lang.Iterable[FloatWritable]): Iterator[Float] = {
     val result = value.iterator
     new Iterator[Float] {
       def hasNext = result.hasNext
@@ -127,7 +127,7 @@ object SHadoop {
     }
   }
 
-  implicit def javaIterator2TextIterator(value: java.util.Iterator[Text]) = new Iterator[String] {
+  implicit def javaIterator2TextIterator(value: java.util.Iterator[Text]): Iterator[String] = new Iterator[String] {
     def hasNext = value.hasNext
     def next = value.next.toString
   }
@@ -135,7 +135,7 @@ object SHadoop {
   /**
    * Added by Mike Long to deal with implicit conversion from java.lang.Iterable
    */
-  implicit def javaIterable2TextIterator(value: java.lang.Iterable[Text]) = {
+  implicit def javaIterable2TextIterator(value: java.lang.Iterable[Text]): Iterator[String] = {
     val result = value.iterator
     new Iterator[String] {
       def hasNext = result.hasNext
@@ -143,7 +143,7 @@ object SHadoop {
     }
   }
 
-  implicit def javaIterator2UTF8Iterator(value: java.util.Iterator[UTF8]) = new Iterator[String] {
+  implicit def javaIterator2UTF8Iterator(value: java.util.Iterator[UTF8]): Iterator[String] = new Iterator[String] {
     def hasNext = value.hasNext
     def next = value.next.toString
   }
@@ -151,7 +151,7 @@ object SHadoop {
   /**
    * Added by Mike Long to deal with implicit conversion from java.lang.Iterable
    */
-  implicit def javaIterable2UTF8Iterator(value: java.lang.Iterable[UTF8]) = {
+  implicit def javaIterable2UTF8Iterator(value: java.lang.Iterable[UTF8]): Iterator[String] = {
     val result = value.iterator
     new Iterator[String] {
       def hasNext = result.hasNext

@@ -80,7 +80,7 @@ trait StringRDBMSBooleanHandler extends RDBMSBooleanHandler {
    * @return either true or false
    * @throws SQLException
    */
-  def nonNullableBoolean(resultSet: ResultSet, columnName: String) = {
+  def nonNullableBoolean(resultSet: ResultSet, columnName: String): Boolean = {
     val charValue = resultSet.getString(columnName)
     if (resultSet.wasNull()) {
       false
@@ -113,7 +113,7 @@ trait StringRDBMSBooleanHandler extends RDBMSBooleanHandler {
    * @param the value to convert to the database's format
    * @return Either null for None, Y for true, or N for false 
    */
-  def booleanOption2Sql(x: Option[Boolean]) = {
+  def booleanOption2Sql(x: Option[Boolean]): String = {
     x match {
       case Some(true) => "Y"
       case Some(false) => "N"
@@ -127,7 +127,7 @@ trait StringRDBMSBooleanHandler extends RDBMSBooleanHandler {
    * @param the value to convert to the database's format
    * @return Y for true, or N for false 
    */
-  def boolean2Sql(x: Boolean) = {
+  def boolean2Sql(x: Boolean): String = {
     x match {
       case true => "Y"
       case false => "N"
@@ -147,7 +147,7 @@ trait IntRDBMSBooleanHandler extends RDBMSBooleanHandler {
    * @return either true or false
    * @throws SQLException
    */
-  def nonNullableBoolean(resultSet: ResultSet, columnName: String) = {
+  def nonNullableBoolean(resultSet: ResultSet, columnName: String): Boolean = {
     val value = resultSet.getInt(columnName)
     if (resultSet.wasNull()) {
       false
@@ -181,7 +181,7 @@ trait IntRDBMSBooleanHandler extends RDBMSBooleanHandler {
    * @param the value to convert to the database's format
    * @return Either null for None, 1 for true, or 0 for false 
    */
-  def booleanOption2Sql(x: Option[Boolean]) = {
+  def booleanOption2Sql(x: Option[Boolean]): Any = {
     x match {
       case Some(true) => 1
       case Some(false) => 0
@@ -195,7 +195,7 @@ trait IntRDBMSBooleanHandler extends RDBMSBooleanHandler {
    * @param the value to convert to the database's format
    * @return 1 for true, or 0 for false 
    */
-  def boolean2Sql(x: Boolean) = {
+  def boolean2Sql(x: Boolean): Int = {
     x match {
       case true => 1
       case false => 0

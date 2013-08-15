@@ -62,7 +62,7 @@ trait BasicDao {
    * @return either None or Option[the Given Type]
    * @throws SQLException
    */
-  protected def nullableString(resultSet: ResultSet, columnName: String) = {
+  protected def nullableString(resultSet: ResultSet, columnName: String):Option[String] = {
     getAsOption[String]({ resultSet.getString(columnName) }, resultSet)
   }
 
@@ -91,7 +91,7 @@ trait BasicDao {
    * @return either None or Option[the Given Type]
    * @throws SQLException
    */
-  protected def nullableTimestamp(resultSet: ResultSet, columnName: String) = {
+  protected def nullableTimestamp(resultSet: ResultSet, columnName: String):Option[java.sql.Timestamp] = {
     getAsOption[java.sql.Timestamp]({ resultSet.getTimestamp(columnName) }, resultSet)
   }
 
@@ -120,7 +120,7 @@ trait BasicDao {
    * @return either None or Option[the Given Type]
    * @throws SQLException
    */
-  protected def nullableDate(resultSet: ResultSet, columnName: String) = {
+  protected def nullableDate(resultSet: ResultSet, columnName: String):Option[java.sql.Date] = {
     getAsOption[java.sql.Date]({ resultSet.getDate(columnName) }, resultSet)
   }
 
@@ -149,7 +149,7 @@ trait BasicDao {
    * @return either None or Option[the Given Type]
    * @throws SQLException
    */
-  protected def nullableShort(resultSet: ResultSet, columnName: String) = {
+  protected def nullableShort(resultSet: ResultSet, columnName: String):Option[Short] = {
     getAsOption[Short]({ resultSet.getShort(columnName) }, resultSet)
   }
 
@@ -178,7 +178,7 @@ trait BasicDao {
    * @return either None or Option[the Given Type]
    * @throws SQLException
    */
-  protected def nullableDouble(resultSet: ResultSet, columnName: String) = {
+  protected def nullableDouble(resultSet: ResultSet, columnName: String):Option[Double] = {
     getAsOption[Double]({ resultSet.getDouble(columnName) }, resultSet)
   }
 
@@ -207,7 +207,7 @@ trait BasicDao {
    * @return either None or Option[the Given Type]
    * @throws SQLException
    */
-  protected def nullableFloat(resultSet: ResultSet, columnName: String) = {
+  protected def nullableFloat(resultSet: ResultSet, columnName: String):Option[Float] = {
     getAsOption[Float]({ resultSet.getFloat(columnName) }, resultSet)
   }
 

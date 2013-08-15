@@ -77,7 +77,7 @@ class HTableDao(val config: Configuration, val tableName: String) {
   /**
    * Deletes all the row pointed to by rowKey including all its column families.
    */
-  def deleteByKey(rowKey: String) {
+  def deleteByKey(rowKey: String): Unit = {
     val delete = new Delete(Bytes.toBytes(rowKey))
     val result = hTable.delete(delete)
     hTable.flushCommits
@@ -132,7 +132,7 @@ class HTableDao(val config: Configuration, val tableName: String) {
    * @param columnName - the columnName within the above column family
    * @param columnValue - the value for that column.
    */
-  def update(rowKey: String, columnGroup: String, columnName: String, columnValue: String) {
+  def update(rowKey: String, columnGroup: String, columnName: String, columnValue: String):Unit = {
 
     val row = Bytes.toBytes(rowKey)
     val p = new Put(row)

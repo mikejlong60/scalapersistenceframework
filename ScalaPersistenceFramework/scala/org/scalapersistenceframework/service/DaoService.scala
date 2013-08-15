@@ -76,7 +76,7 @@ class DaoService[T <: GridCapableEntity](val dao: CrudDao[T], val connectionName
    * @throws Exception
    *             if something goes wrong at the database level.
    */
-  def save(vos: Set[T])(implicit trans: TransactionPropagation, transIsolationLevel: IsolationLevel) {
+  def save(vos: Set[T])(implicit trans: TransactionPropagation, transIsolationLevel: IsolationLevel): Unit = {
     trans enclose (connectionName, {
       vos foreach { vo =>
         vo.persistentOperationType match {
@@ -129,7 +129,7 @@ class DaoService[T <: GridCapableEntity](val dao: CrudDao[T], val connectionName
    * @throws Exception
    *             If something fails at database level.
    */
-  def update(vo: T)(implicit trans: TransactionPropagation, transIsolationLevel: IsolationLevel) {
+  def update(vo: T)(implicit trans: TransactionPropagation, transIsolationLevel: IsolationLevel): Unit = {
     trans enclose (connectionName, {
       logger.info(transIsolationLevel + " for update")
       dao.update(vo)
@@ -149,7 +149,7 @@ class DaoService[T <: GridCapableEntity](val dao: CrudDao[T], val connectionName
    * @throws Exception
    *             If something else fails at database level.
    */
-  def delete(vo: T)(implicit trans: TransactionPropagation, transIsolationLevel: IsolationLevel) {
+  def delete(vo: T)(implicit trans: TransactionPropagation, transIsolationLevel: IsolationLevel): Unit = {
     trans enclose (connectionName, {
       logger.info(transIsolationLevel + " for delete")
       dao.delete(vo)

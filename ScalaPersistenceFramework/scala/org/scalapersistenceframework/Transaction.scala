@@ -131,7 +131,7 @@ abstract class Transaction {
   /**
    * This method gets the connection associated with a transaction.
    */
-  def getConnectionForTransaction() = {
+  def getConnectionForTransaction(): java.sql.Connection = {
     val current = threadLocal.get()
     if (current != null && current.connection != null) {
       current.connection
@@ -149,7 +149,7 @@ abstract class Transaction {
    *            - An identifier uniquely naming the method.
    * @throws SQLException
    */
-  def commit(currentMethodName: String) {
+  def commit(currentMethodName: String): Unit = {
     require(StringUtils.isNotEmpty(currentMethodName), "The currentMethodName cannot be null or empty.")
     
     val current = threadLocal.get()
@@ -171,7 +171,7 @@ abstract class Transaction {
    *            - An identifier uniquely naming the method.
    * @throws SQLException
    */
-  def rollback(currentMethodName: String) {
+  def rollback(currentMethodName: String): Unit = {
     require(StringUtils.isNotEmpty(currentMethodName), "The currentMethodName cannot be null or empty.")
     
     val current = threadLocal.get()
@@ -196,7 +196,7 @@ abstract class Transaction {
    * @throws SQLException
    */
 
-  def start(connectionName: Option[String], currentMethodName: String)(implicit transIsolationLevel: IsolationLevel) {
+  def start(connectionName: Option[String], currentMethodName: String)(implicit transIsolationLevel: IsolationLevel): Unit = {
     if (threadLocal.get() == null) {
       logger.info("starting transaction")
       val currentTransaction = new CurrentTransaction(currentMethodName, connectionName)
@@ -214,7 +214,7 @@ abstract class Transaction {
    * This returns true if a transaction exists for the current thread.
    *
    */
-  def exists() = {
+  def exists(): Boolean = {
     threadLocal.get() != null
   }
 
@@ -232,7 +232,7 @@ abstract class Transaction {
    *     @param currentMethodName An identifier uniquely naming the method.
    * @throws SQLException
    */
-  def end(connectionName: Option[String], currentMethodName: String) {
+  def end(connectionName: Option[String], currentMethodName: String): Unit = {
     require(StringUtils.isNotEmpty(currentMethodName), "The currentMethodName cannot be null or empty.")
     
     val current = threadLocal.get()
@@ -253,7 +253,7 @@ abstract class Transaction {
    *            The Connection to be closed quietly.
    * @throws SQLException
    */
-  private def close(connection: Connection) {
+  private def close(connection: Connection): Unit = {
     if (connection != null) {
       connection.close()
     }
@@ -334,7 +334,7 @@ object Transaction {
    *             be found.
    *
    */
-  def configure(connectionName: String) {
+  def configure(connectionName: String): Unit = {
     Transaction.this.synchronized {
       require(StringUtils.isNotEmpty(connectionName), "The connection name was null or empty.")
 
@@ -434,7 +434,7 @@ object Transaction {
    * with a clean slate, like as part of the tearDown from a unit test.
    *
    */
-  def closeAll {
+  def closeAll: Unit = {
     logger.info("inside CloseAll.")
     val transactionObjects = transactions.values
     for (transaction <- transactionObjects) yield {
