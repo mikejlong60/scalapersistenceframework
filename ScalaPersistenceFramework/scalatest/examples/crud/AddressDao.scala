@@ -41,7 +41,7 @@ class AddressDao(override val connectionName: Option[String]) extends CrudDao[Ad
 
   def validatePkForUpdate(vo: Address): Unit = validatePkForInsert(vo)
   def validatePkForInsert(vo: Address): Unit = {
-    if (vo.id == null) throw new IllegalArgumentException("Missing ID")
+    require(vo.id != null, "Missing ID")
   }
 
   /**

@@ -150,10 +150,8 @@ abstract class Transaction {
    * @throws SQLException
    */
   def commit(currentMethodName: String) {
-    if (StringUtils.isEmpty(currentMethodName)) {
-      throw new IllegalArgumentException(
-        "The currentMethodName cannot be null or empty.")
-    }
+    require(StringUtils.isNotEmpty(currentMethodName), "The currentMethodName cannot be null or empty.")
+    
     val current = threadLocal.get()
     if (currentMethodName.equals(current.transactionOwner)) {
       logger.info("committing transaction for connection:"
@@ -174,10 +172,8 @@ abstract class Transaction {
    * @throws SQLException
    */
   def rollback(currentMethodName: String) {
-    if (StringUtils.isEmpty(currentMethodName)) {
-      throw new IllegalArgumentException(
-        "The currentMethodName cannot be null or empty.")
-    }
+    require(StringUtils.isNotEmpty(currentMethodName), "The currentMethodName cannot be null or empty.")
+    
     val current = threadLocal.get()
     if (currentMethodName.equals(current.transactionOwner)) {
       logger.info("rolling back transaction for connection:"
@@ -237,10 +233,8 @@ abstract class Transaction {
    * @throws SQLException
    */
   def end(connectionName: Option[String], currentMethodName: String) {
-    if (StringUtils.isEmpty(currentMethodName)) {
-      throw new IllegalArgumentException(
-        "The currentMethodName cannot be null or empty.")
-    }
+    require(StringUtils.isNotEmpty(currentMethodName), "The currentMethodName cannot be null or empty.")
+    
     val current = threadLocal.get()
     if (currentMethodName.equals(current.transactionOwner)) {
       logger.info("Ending transaction.")
@@ -277,9 +271,9 @@ case class DataSourceTransaction(val dataSource: DataSource) extends Transaction
 
 case class DriverManagerTransaction(val url: String, val username: String, val password: String) extends Transaction {
 
-  if (url == null || url.length == 0) throw new IllegalArgumentException("url cannot be empty.")
-  if (username == null || username.length == 0) throw new IllegalArgumentException("username cannot be empty.")
-  if (password == null || password.length == 0) throw new IllegalArgumentException("password cannot be empty.")
+  require(url != null && url.length > 0, "url cannot be empty.")
+  require(username != null && username.length > 0, "username cannot be empty.")
+  require(password != null && password.length > 0, "password cannot be empty.")
   def getConnection: Connection = {
     return DriverManager.getConnection(url, username, password)
   }
@@ -299,8 +293,7 @@ case class DataSourceWithLoginTransaction(val dataSource: DataSource, val userna
  */
 class CurrentTransaction(val transactionOwner: String, val connectionName: Option[String]) {
 
-  if (transactionOwner == null || transactionOwner.isEmpty)
-    throw new IllegalArgumentException("The transactionOwner cannot be null or empty.")
+  require(transactionOwner != null && !transactionOwner.isEmpty, "The transactionOwner cannot be null or empty.")
   val connection: Connection = Transaction.getInstance(connectionName).getConnection()
   connection.setAutoCommit(false)
   val defaultTransactionIsolation = connection.getTransactionIsolation()
@@ -343,14 +336,12 @@ object Transaction {
    */
   def configure(connectionName: String) {
     Transaction.this.synchronized {
-      if (StringUtils.isEmpty(connectionName)) {
-        throw new IllegalArgumentException("The connection name was null or empty.")
-      }
+      require(StringUtils.isNotEmpty(connectionName), "The connection name was null or empty.")
 
       var namedTransaction: Transaction = null
       val properties = new DaoProperties(connectionName)
       val url = properties.getProperty(PROPERTY_URL)
-      if (url isEmpty) throw new IllegalArgumentException("You are missing a required property called[" + connectionName + ".url] in the dao.properties file.")
+      require(!url.isEmpty, "You are missing a required property called[" + connectionName + ".url] in the dao.properties file.")
       val driverClassName = properties.getProperty(PROPERTY_DRIVER)
       val password = properties.getProperty(PROPERTY_PASSWORD)
       val username = properties.getProperty(PROPERTY_USERNAME)
@@ -421,11 +412,8 @@ object Transaction {
    * @see Transaction.configure(String connectionName)
    */
   def getInstance(connectionName: Option[String]): Transaction = {
-    if (transactions.size == 0) {
-      throw new IllegalArgumentException(
-        "You must first configure the transaction with database connection information.")
-    }
-
+    require(transactions.size > 0, "You must first configure the transaction with database connection information.")
+    
     connectionName match {
       case None =>
         getInstance

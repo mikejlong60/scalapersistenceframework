@@ -26,7 +26,8 @@ package org.scalapersistenceframework.util
  */
 object StringUtils {
 
-  def isEmpty(s: String) = {
-    s == null || s.trim.isEmpty
-  }
+  def isEmpty(s: String):Boolean = s == null || s.trim.isEmpty
+  
+  def isNotEmpty(s: String):Boolean = !isEmpty(s)
+
 }

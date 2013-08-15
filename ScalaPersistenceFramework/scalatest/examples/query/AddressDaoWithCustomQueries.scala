@@ -34,7 +34,7 @@ class AddressDaoWithCustomQueries(override val connectionName: Option[String]) e
 
   def validatePkForUpdate(vo: Address): Unit = validatePkForInsert(vo)
   def validatePkForInsert(vo: Address): Unit = {
-    if (vo.id == null) throw new IllegalArgumentException("Missing ID")
+    require(vo.id != null, "Missing ID")
   }
 
   /**

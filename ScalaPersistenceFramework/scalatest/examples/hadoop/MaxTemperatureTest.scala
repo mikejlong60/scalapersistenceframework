@@ -29,7 +29,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
 import org.scalatest.FunSuite
 import org.scalapersistenceframework.util.FileHelper.file2helper
 
-
 class MaxTemperatureTest extends FunSuite {
   val logger = Logger.getLogger(this.getClass().getName())
 
@@ -48,6 +47,16 @@ class MaxTemperatureTest extends FunSuite {
     job.setOutputValueClass(classOf[IntWritable])
 
     job.waitForCompletion(true)
+
+    val f1 = new java.io.File("output/_SUCCESS");
+    val f2 = new java.io.File("output/part-r-00000");
+    expectResult(true) { f1.exists }
+    expectResult(true) { f2.exists }
+    val pdir = new File("output")
+    pdir.deleteAll
+    val dir = new java.io.File("output");
+    expectResult(false) { dir.exists }
+
   })
 
 }

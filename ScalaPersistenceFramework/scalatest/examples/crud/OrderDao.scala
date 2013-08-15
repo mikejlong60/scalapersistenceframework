@@ -39,11 +39,11 @@ class OrderDao(override val connectionName: Option[String]) extends CrudDao[Orde
   }
 
   def validatePkForUpdate(vo: Order): Unit = {
-    if (vo.id == null) throw new IllegalArgumentException("You have specify the PK for an update.")
+    require(vo.id != null, "You have to specify the PK for an update.")
   }
 
   def validatePkForInsert(vo: Order): Unit = {
-    if (vo.id != null) throw new IllegalArgumentException("The Order table uses an auto-generated key. It needs to be null for an insert.")
+    require(vo.id == null, "The Order table uses an auto-generated key. It needs to be null for an insert.")
   }
 
   /**

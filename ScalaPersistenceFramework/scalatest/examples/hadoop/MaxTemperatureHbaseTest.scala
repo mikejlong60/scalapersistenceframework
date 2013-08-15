@@ -38,9 +38,9 @@ class MaxTemperatureHBaseTest extends FunSuite {
 
   test("Test Simple MapReduce that reads data from a big file and puts it into an HBase table.")({
     //Get rid of old row so test tell the truth about inserting it.
-    val orderDao = new HTableDao(HBaseConfiguration.create(), "maxtemperature")
-    orderDao.deleteByKey("1949")
-    expectResult(true) { orderDao.findByKey("1949").isEmpty }
+    val maxtemperatureDao = new HTableDao(HBaseConfiguration.create(), "maxtemperature")
+    maxtemperatureDao.deleteByKey("1949")
+    expectResult(true) { maxtemperatureDao.findByKey("1949").isEmpty }
 
     //Create a new job to insert these rows from the weather file into the HBase maxtemperatrure table.
     //There are only 4 years of observations so the mapper initially inserts the 4 rows and
@@ -62,6 +62,6 @@ class MaxTemperatureHBaseTest extends FunSuite {
 
     job.waitForCompletion(true)
 
-    expectResult(false) { orderDao.findByKey("1949").isEmpty }
+    expectResult(false) { maxtemperatureDao.findByKey("1949").isEmpty }
   })
 }
