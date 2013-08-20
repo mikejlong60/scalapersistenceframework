@@ -87,19 +87,20 @@ class HTableDao(val config: Configuration, val tableName: String) {
    * Inserts a new object into the HBase  table.  It creates the row with a
    * key of the current time stamp and a random char and returns that key to the caller.
    *
-   * @param columnGroup - the column family that the columnName attribute belongs to
+   * @param columnFamilyName - the column family that the columnName attribute belongs to
    * @param columnName - the columnName within the above column family
    * @param columnValue - the value for that column.
    *
    * @return - the key of the row just inserted
    */
-  def insert(columnGroup: String, columnName: String, columnValue: String): String = {
+  def insert(columnFamilyName: String, columnName: String, columnValue: String): String = {
+    require(columnFamilies.map(family => family.getNameAsString).contains(columnFamilyName), "The HBase table does not contain the column family[" + columnFamilyName + "]")
 
     val rowKey = System.nanoTime.toString + random.nextPrintableChar.toString
     val row = Bytes.toBytes(rowKey)
     val p = new Put(row)
 
-    val databytes = Bytes.toBytes(columnGroup)
+    val databytes = Bytes.toBytes(columnFamilyName)
     p.add(databytes, Bytes.toBytes(columnName), Bytes.toBytes(columnValue))
     p.add(databytes, Bytes.toBytes("update_ts"), Bytes.toBytes(System.currentTimeMillis()))
     hTable.put(p)
@@ -128,16 +129,17 @@ class HTableDao(val config: Configuration, val tableName: String) {
   /**
    * Updates the row pointed to by rowKey with the columnValue.
    *
-   * @param columnGroup - the column family that the columnName attribute belongs to
+   * @param columnFamilyName - the column family that the columnName attribute belongs to
    * @param columnName - the columnName within the above column family
    * @param columnValue - the value for that column.
    */
-  def update(rowKey: String, columnGroup: String, columnName: String, columnValue: String):Unit = {
+  def update(rowKey: String, columnFamilyName: String, columnName: String, columnValue: String): Unit = {
+    require(columnFamilies.map(family => family.getNameAsString).contains(columnFamilyName), "The HBase table does not contain the column family[" + columnFamilyName + "]")
 
     val row = Bytes.toBytes(rowKey)
     val p = new Put(row)
 
-    val databytes = Bytes.toBytes(columnGroup)
+    val databytes = Bytes.toBytes(columnFamilyName)
     p.add(databytes, Bytes.toBytes(columnName), Bytes.toBytes(columnValue))
     p.add(databytes, Bytes.toBytes("update_ts"), Bytes.toBytes(System.nanoTime))
     hTable.put(p)
@@ -148,7 +150,7 @@ class HTableDao(val config: Configuration, val tableName: String) {
    * Updates the row pointed to by rowKey with the columnValue if the value of the column is equal
    * to the passed value. This is how you do optimistic locking in HBase.
    *
-   * @param columnGroup - the column family that the columnName attribute belongs to
+   * @param columnFamilyName - the column family name that the columnName attribute belongs to
    * @param columnName - the columnName within the above column family
    * @param columnValue - the value for that column.
    * @param valueToCompareAgainst - The value to compare with the current value of that column for the given row
@@ -156,14 +158,15 @@ class HTableDao(val config: Configuration, val tableName: String) {
    * @return true if the current value of the row is equal to the valueToCompareAgainst and the row was successfully updated.
    * false otherwise.
    */
-  def compareAndUpdate(rowKey: String, columnGroup: String, columnName: String, columnValue: String, valueToCompareAgainst: String): Boolean = {
+  def compareAndUpdate(rowKey: String, columnFamilyName: String, columnName: String, columnValue: String, valueToCompareAgainst: String): Boolean = {
+    require(columnFamilies.map(family => family.getNameAsString).contains(columnFamilyName), "The HBase table does not contain the column family[" + columnFamilyName + "]")
 
     val row = Bytes.toBytes(rowKey)
     val p = new Put(row)
 
-    val databytes = Bytes.toBytes(columnGroup)
+    val databytes = Bytes.toBytes(columnFamilyName)
     p.add(databytes, Bytes.toBytes(columnName), Bytes.toBytes(columnValue))
-    val result = hTable.checkAndPut(Bytes.toBytes(rowKey), Bytes.toBytes(columnGroup), Bytes.toBytes(columnName), Bytes.toBytes(valueToCompareAgainst), p)
+    val result = hTable.checkAndPut(Bytes.toBytes(rowKey), Bytes.toBytes(columnFamilyName), Bytes.toBytes(columnName), Bytes.toBytes(valueToCompareAgainst), p)
     hTable.flushCommits
     result
   }
@@ -171,14 +174,14 @@ class HTableDao(val config: Configuration, val tableName: String) {
   /**
    * Produces a list of the column families for the table that is attached to this DAO.
    */
-  def getColumnFamily: List[HColumnDescriptor] = {
+  def columnFamilies: List[HColumnDescriptor] = {
     hTable.getTableDescriptor.getColumnFamilies.toList
   }
 
   /**
    * Produces a list of all the tables in the current Hbase configuration.
    */
-  def getTables: List[HTableDescriptor] = {
+  def tables: List[HTableDescriptor] = {
     admin.listTables.toList
   }
 

@@ -119,6 +119,13 @@ class HTableDaoTest extends FunSuite {
 
   })
 
+  test("Test that the columnFamily name gets validated")({
+    intercept[IllegalArgumentException] {
+      val orderDao = new HTableDao(HBaseConfiguration.create(), "order")
+      orderDao.insert("badFamilyName", "description", "Lowes wheelbarrow order")
+    }
+  })
+
   test("Test compareAndUpdate")({
     val orderDao = new HTableDao(HBaseConfiguration.create(), "order")
     val rowKey = orderDao.insert("orderFamily", "description", "Lowes wheelbarrow order") //columnGroup:String, columnName:String, columnValue:String
@@ -132,7 +139,7 @@ class HTableDaoTest extends FunSuite {
 
   test("Test getColumnFamilies")({
     val orderDao = new HTableDao(HBaseConfiguration.create(), "order")
-    orderDao.getColumnFamily.foreach(family => expectResult(true) {
+    orderDao.columnFamilies.foreach(family => expectResult(true) {
       family.getNameAsString match {
         case "orderFamily" => true
         case "addressFamily" => true
@@ -144,7 +151,7 @@ class HTableDaoTest extends FunSuite {
 
   test("Test getTables")({
     val orderDao = new HTableDao(HBaseConfiguration.create(), "order")
-    orderDao.getTables.foreach(table => expectResult(true) {
+    orderDao.tables.foreach(table => expectResult(true) {
       table.getNameAsString match {
         case "order" => true
         case "address" => true
