@@ -174,7 +174,7 @@ class HTableDao(val config: Configuration, val tableName: String) {
   /**
    * Produces a list of the column families for the table that is attached to this DAO.
    */
-  def columnFamilies: List[HColumnDescriptor] = {
+  val columnFamilies: List[HColumnDescriptor] = {
     hTable.getTableDescriptor.getColumnFamilies.toList
   }
 

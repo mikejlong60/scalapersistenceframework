@@ -13,6 +13,7 @@
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="testlib.dir" value="${basedir}/testlib" />
 	<property name="build.dir" value="${basedir}/build" />
+	<property name="docs.dir" value="${basedir}/docs" />
 	<property name="jar.file" value="${basedir}/${name.version}.jar" />
 	<property name="sourcejar.file" value="${basedir}/${name.version}-source.jar" />
 	<property name="testsourcejar.file" value="${basedir}/${name.version}-testsource.jar" />
@@ -75,6 +76,20 @@
 	    </scalac>
 	</target>
 	 	
+	<!-- =================================================================== -->
+	<!-- Generate Scaladocs                                                  --> 
+	<!-- =================================================================== -->
+	<target name="docs" depends="init.scala">
+	    <mkdir dir="${docs.dir}"   />
+	    <scaladoc
+	      srcdir="${scalasrc.dir}"
+	      destdir="${docs.dir}"
+	      deprecation="yes" unchecked="yes"
+	      doctitle="ScalaPersistenceFramework 0.1"
+	      classpathref="scala.classpath">
+	    </scaladoc>
+	  </target>
+	
 	<!-- =================================================================== -->
 	<!-- Compile Scala Tests                                                      --> 
 	<!-- =================================================================== -->
@@ -154,6 +169,7 @@
 		<delete file="${jar.file}" />
 		<delete dir="${build.dir}" />
 		<delete dir="${dist.dir}" />
+		<delete dir="${docs.dir}" />
 	</target>
 
 	<!-- =================================================================== -->

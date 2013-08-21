@@ -109,7 +109,7 @@ class DaoService[T <: GridCapableEntity](val dao: CrudDao[T], val connectionName
    *
    * @param vo
    *            The row to be inserted into the database.
-   * @returns the generated key value if an auto-generated key is declared in
+   * @return the generated key value if an auto-generated key is declared in
    *          the database for the table. Otherwise null.
    * @throws Exception
    *             If something fails at database level.

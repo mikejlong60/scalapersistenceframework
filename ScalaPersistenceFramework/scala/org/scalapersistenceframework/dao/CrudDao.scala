@@ -140,7 +140,7 @@ trait CrudDao[T <: GridCapableEntity] extends BasicDao {
    *
    * @param vo
    *            The row to be created in the database.
-   * @returns the generated key value if an auto-generated key is declared in
+   * @return the generated key value if an auto-generated key is declared in
    *          the database for the table. Otherwise -1
    * @throws IllegalArgumentException
    *             If the primary key does not pass the validation function defined by the
