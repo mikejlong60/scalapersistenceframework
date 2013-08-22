@@ -143,7 +143,6 @@ class HTableDaoTest extends FunSuite {
       family.getNameAsString match {
         case "orderFamily" => true
         case "addressFamily" => true
-        case "fred" => true
         case _ => false
       }
     })

@@ -33,6 +33,28 @@ import org.apache.hadoop.hbase.client.Scan
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.hbase.HColumnDescriptor
 
+/**
+ * This class is an example of how to interact with an HBase table in Scala. It 
+ * is not ready for production use which is why it is not in the source tree of the 
+ * Scala Persistence Framework. I have made the following assumptions which will not generally
+ * be true:
+ * 
+ * 1) Methods that do mutations to the HBase table use Strings instead of byte arrays.
+ * 2) Keys are assumed to be Strings instead of byte arrays.
+ * 3) An instance of an HTable should be cached by table name. They are very expensive to create
+ * because the HBase metadata gets read for every new instance.
+ * 4) The toList sucks the entire HBase cursor into the list which will cause stack overflows
+ * for large result sets. To prevent this from happening use a stream (I haven't done this)
+ * or limit the size of the result set with the appropriate HBase filter class and make it part
+ * of the scan object that you pass in.
+ * 
+ * I do like the use of the implicit conversions. I will make more of these for converting between
+ * the Scala type in a value object(Think the Order class that is in the OrderDao.scala file.) and 
+ * native HBase byte arrays.
+ * 
+ * 
+ *  
+ */
 class HTableDao(val config: Configuration, val tableName: String) {
 
   // The following 
