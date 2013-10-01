@@ -21,12 +21,12 @@ import java.util.logging.Logger
 class Schema(private val conn: Connection, val schema: String) extends NameConverter with Equals {
   val logger = Logger.getLogger(this.getClass().getName())
 
-  override val scalaName = capitalize(dbNameToVariableName(schema))
-  override val variableName = decapitalize(scalaName)
+  override lazy val scalaName = capitalize(dbNameToVariableName(schema))
+  override lazy val variableName = decapitalize(scalaName)
 
   //These getters make the fields available to Velocity Templates
-  def getSchema = {schema}
-  def getTables = {tables}
+  lazy val getSchema = {schema}
+  lazy val getTables = {tables}
   ////////////////////////////
   override def canEqual(other: Any) = other.isInstanceOf[Schema]
   override def hashCode = {

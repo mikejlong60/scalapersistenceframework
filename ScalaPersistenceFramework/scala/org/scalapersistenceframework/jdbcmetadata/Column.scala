@@ -11,9 +11,9 @@ class Column(val sqlType: Int, val sqlTypeName: String, val sqlName: String, val
 
   val logger = Logger.getLogger(this.getClass().getName())
 
-  override val scalaName = capitalize(dbNameToVariableName(sqlName))
-  override val variableName = decapitalize(scalaName)
-  private val scalaType = this.sqlTypeName match {
+  override lazy val scalaName = capitalize(dbNameToVariableName(sqlName))
+  override lazy val variableName = decapitalize(scalaName)
+  private lazy val scalaType = this.sqlTypeName match {
     //Integer type defaults
     case "serial" if (!isNullable) => "java.lang.Long"
     case "int4" if (!isNullable) => "java.lang.Long"
@@ -48,7 +48,7 @@ class Column(val sqlType: Int, val sqlTypeName: String, val sqlName: String, val
     case default => throw new IllegalArgumentException("Unknown type[" + default + "]")
   }
 
-  private val scalaTypeMap = Map(
+  private lazy val scalaTypeMap = Map(
     "java.lang.Long" -> List("nonNullableLong", "random.nextLong"),
     "Option[Long]" -> List("nullableLong", "Some(random.nextLong)"),
     "Long" -> List("nonNullableLong", "random.nextLong"),
@@ -68,14 +68,14 @@ class Column(val sqlType: Int, val sqlTypeName: String, val sqlName: String, val
 
   //These getters make the fields available to Velocity Templates. 
   //Note, isPk and isNullable are already available because Velocity can find them from the byte code for the constructor.
-  def getSqlType = { sqlType }
-  def getSqlTypeName = { sqlTypeName }
-  def getSqlName = { sqlName }
-  def getSize = { size }
-  def getDecimalDigits = { decimalDigits }
-  def getScalaType = {scalaType}
-  def getScalaSelectMapper = {scalaTypeMap(scalaType).head}
-  def getScalaConstructorMapper = {if (sqlTypeName == "serial") "null" else scalaTypeMap(scalaType).tail.last}
+  lazy val getSqlType = { sqlType }
+  lazy val getSqlTypeName = { sqlTypeName }
+  lazy val getSqlName = { sqlName }
+  lazy val getSize = { size }
+  lazy val getDecimalDigits = { decimalDigits }
+  lazy val getScalaType = {scalaType}
+  lazy val getScalaSelectMapper = {scalaTypeMap(scalaType).head}
+  lazy val getScalaConstructorMapper = {if (sqlTypeName == "serial") "null" else scalaTypeMap(scalaType).tail.last}
   ////////////////////////////
   override def canEqual(other: Any) = other.isInstanceOf[Column]
   override def hashCode = {

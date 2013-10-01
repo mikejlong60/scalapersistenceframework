@@ -29,24 +29,24 @@ class Table(private val conn: Connection, val sqlName: String, val schema: Strin
 
   val logger = Logger.getLogger(this.getClass().getName())
 
-  override val scalaName = capitalize(dbNameToVariableName(sqlName))
-  override val variableName = decapitalize(scalaName)
+  override lazy val scalaName = capitalize(dbNameToVariableName(sqlName))
+  override lazy val variableName = decapitalize(scalaName)
 
   /** All the primary key columns */
-  val primaryKeyFieldNames = populatePrimaryKeyFieldNames
+  lazy val primaryKeyFieldNames = populatePrimaryKeyFieldNames
   /** All the columns of this table except for the primary key columns */
-  private val columns = populateColumns
-  private val primaryKeys = columns.filter(column => column.isPk)
+  lazy private val columns = populateColumns
+  lazy private val primaryKeys = columns.filter(column => column.isPk)
 
   //These getters make the fields available to Velocity Templates
-  def getSchema = { schema }
-  def getSqlName = { sqlName }
-  def getColumns = { columns }
-  def getColumnsSize = { columns.size }
-  def getPrimaryKeys = { primaryKeys }
-  def getPrimaryKeysSize = { primaryKeys.size }
-  def getNonPrimaryKeysSize = {columns.size - primaryKeys.size}
-  def getNonPrimaryKeyColumns = {columns.filter(column => !column.isPk)}
+  lazy val getSchema = { schema }
+  lazy val getSqlName = { sqlName }
+  lazy val getColumns = { columns }
+  lazy val getColumnsSize = { columns.size }
+  lazy val getPrimaryKeys = { primaryKeys }
+  lazy val getPrimaryKeysSize = { primaryKeys.size }
+  lazy val getNonPrimaryKeysSize = {columns.size - primaryKeys.size}
+  lazy val getNonPrimaryKeyColumns = {columns.filter(column => !column.isPk)}
   ////////////////////////////
 
   override def canEqual(other: Any) = other.isInstanceOf[Table]

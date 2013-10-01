@@ -22,8 +22,8 @@ abstract class NameConverter extends Equals {
   val variableName: String
   
   //These two getters make the fields available to Velocity Templates
-  def getScalaName = {scalaName}
-  def getVariableName = {variableName}
+  lazy val getScalaName = {scalaName}
+  lazy val getVariableName = {variableName}
 
   override def canEqual(other: Any) = other.isInstanceOf[NameConverter]
   override def hashCode = {
