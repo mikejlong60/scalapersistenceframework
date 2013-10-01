@@ -38,21 +38,21 @@ class VelocityTemplateFileGeneratorTest extends FunSuite with DataSourceConfigur
     val generator = new VelocityTemplateFileGenerator
     generator.generate
 
-//    val f1 = new File("AddressDao.scala");
-//    val f2 = new File("AddressTest.scala");
-//    val f3 = new File("OrderDao.scala");
-//    val f4 = new java.io.File("OrderTest.scala");
-//    expectResult(true) { f1.exists }
-//    expectResult(true) { f2.exists }
-//    expectResult(true) { f3.exists }
-//    expectResult(true) { f4.exists }
-//    f1.delete
-//    f2.delete
-//    f3.delete
-//    f4.delete
-//    expectResult(false) { f1.exists }
-//    expectResult(false) { f2.exists }
-//    expectResult(false) { f3.exists }
-//    expectResult(false) { f4.exists }
+    val f1 = new File("AddressDao.scala");
+    val f2 = new File("AddressTest.scala");
+    val f3 = new File("OrderDao.scala");
+    val f4 = new java.io.File("OrderTest.scala");
+    expectResult(true) { f1.exists }
+    expectResult(true) { f2.exists }
+    expectResult(true) { f3.exists }
+    expectResult(true) { f4.exists }
+    f1.delete
+    f2.delete
+    f3.delete
+    f4.delete
+    expectResult(false) { f1.exists }
+    expectResult(false) { f2.exists }
+    expectResult(false) { f3.exists }
+    expectResult(false) { f4.exists }
   }
 }
